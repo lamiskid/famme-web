@@ -80,4 +80,78 @@ class ProductRepository(
                 )
             }.list()
     }
+
+    fun countSearchedProduct(search: String): Int {
+        return if (search.isBlank()) {
+            jdbcClient.sql("SELECT COUNT(*) FROM products")
+                .query(Int::class.java)
+                .single() ?: 0
+        } else {
+            jdbcClient.sql("SELECT COUNT(*) FROM products WHERE LOWER(title) LIKE :search")
+                .param("search", "%${search.lowercase()}%")
+                .query(Int::class.java)
+                .single() ?: 0
+        }
+    }
+
+    /*fun findPaged(limit: Int, offset: Int, search: String): List<Product> {
+        return if (search.isBlank()) {
+            jdbcClient.sql(
+                "SELECT id, title, vendor, handle FROM products ORDER BY id LIMIT :limit OFFSET :offset"
+            )
+                .param("limit", limit)
+                .param("offset", offset)
+                .query(Product::class.java)
+                .list()
+        } else {
+            jdbcClient.sql(
+                """
+                SELECT id, title, vendor, handle
+                FROM products
+                WHERE LOWER(title) LIKE :search
+                ORDER BY id
+                LIMIT :limit OFFSET :offset
+                """.trimIndent()
+            )
+                .param("search", "%${search.lowercase()}%")
+                .param("limit", limit)
+                .param("offset", offset)
+                .query(Product::class.java)
+                .list()
+        }
+    }*/
+
+    fun findPaged(limit: Int, offset: Int, search: String): List<Product> {
+        val sql = if (search.isBlank()) {
+            """
+        SELECT id, title, vendor, handle
+        FROM products
+        ORDER BY id DESC
+        LIMIT :limit OFFSET :offset
+        """
+        } else {
+            """
+        SELECT id, title, vendor, handle
+        FROM products
+        WHERE LOWER(title) LIKE :search
+        ORDER BY id DESC
+        LIMIT :limit OFFSET :offset
+        """
+        }
+
+        return jdbcClient.sql(sql)
+            .param("search", "%${search.lowercase()}%")
+            .param("limit", limit)
+            .param("offset", offset)
+            .query { rs, _ ->
+                Product(
+                    id = rs.getLong("id"),
+                    title = rs.getString("title"),
+                    vendor = rs.getString("vendor"),
+                    handle = rs.getString("handle")
+                )
+            }
+            .list()
+    }
+
 }

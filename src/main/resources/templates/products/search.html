@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Search Products</title>
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-REPLACE-WITH-INTEGRITY" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    :root {
+      --border: #e5e7eb;
+      --bg: #f9fafb;
+      --text: #111827;
+      --subtle: #6b7280;
+      --brand: #2563eb;
+    }
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; color: var(--text); background: var(--bg); }
+    .container { max-width: 900px; margin: 0 auto; padding: 1.25rem; }
+    .back { color: var(--brand); text-decoration: none; display: inline-flex; align-items: center; gap: .5rem; margin-bottom: 1rem; }
+    .card { background: #fff; border: 1px solid var(--border); border-radius: .5rem; padding: 1rem; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+    .search-wrap { display: flex; align-items: center; gap: .5rem; }
+    .input-group { position: relative; display: inline-flex; align-items: center; }
+    .input-group i { position: absolute; left: .5rem; color: var(--subtle); }
+    /* compact input */
+    .search-input {
+      padding: .4rem .6rem .4rem 1.75rem;
+      border: 1px solid var(--border);
+      border-radius: .375rem;
+      width: 280px; /* smaller */
+      font-size: .95rem;
+      background: #fff;
+    }
+    .search-input:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px rgba(37,99,235,.15); }
+    .hint { color: var(--subtle); font-size: .85rem; margin-left: .5rem; }
+    table { width: 100%; border-collapse: collapse; margin-top: .75rem; }
+    th, td { border: 1px solid var(--border); padding: .6rem .75rem; text-align: left; }
+    th { background: #f3f4f6; font-weight: 600; }
+    tbody tr:hover { background: #f9fafb; }
+    #product-table { margin-top: .75rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <a href="/" class="back"><i class="fa-solid fa-arrow-left"></i> Back to Products</a>
+
+    <div class="card">
+      <div class="search-wrap">
+        <div class="input-group">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input
+              type="text"
+              id="search-input"
+              name="q"
+              placeholder="Search by title"
+              class="search-input"
+              hx-get="/ui/products/search-list"
+              hx-trigger="keyup changed delay:300ms"
+              hx-target="#product-table"
+              hx-swap="innerHTML"
+              autofocus
+          >
+        </div>
+        <span class="hint">Type to search…</span>
+      </div>
+
+      <div id="product-table">
+        <table>
+          <thead>
+          <tr>
+            <th>Title</th>
+            <th>Vendor</th>
+            <th>Handle</th>
+          </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

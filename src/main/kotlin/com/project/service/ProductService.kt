@@ -45,4 +45,12 @@ class ProductService(
 
     fun getTotalProducts(): Int =
         productRepository.getTotalProducts()
+
+    fun getTotalProducts(search: String): Int {
+        return productRepository.countSearchedProduct(search)
+    }
+
+    fun getProductsPaged(limit: Int, offset: Int, search: String): List<Product> {
+        return productRepository.findPaged(limit, offset, search)
+    }
 }
