@@ -19,7 +19,7 @@ class ProductFetcher(
 ) {
 
     private val client = WebClient.create("https://famme.no")
-    private val limit = 1
+    private val limit = 50
 
     @Scheduled(initialDelay = 0, fixedDelayString = "PT24H")
     fun fetchAndSaveProducts() {
