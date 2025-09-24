@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="'View Product - ' + ${product.title}">Product View</title>
+  <link rel="stylesheet" href="https://early.webawesome.com/webawesome@3.0.0-beta.6/dist/styles/webawesome.css" />
+  <script type="module" src="https://early.webawesome.com/webawesome@3.0.0-beta.6/dist/webawesome.loader.js"></script>
+   <style>
+     body {
+       font-family: system-ui, sans-serif;
+       background-color: #f9fafb;
+       color: #111827;
+       margin: 0;
+       padding: 2rem;
+     }
+
+     .card {
+       max-width: 900px;
+       margin: auto;
+       background: white;
+       padding: 2rem;
+       border-radius: 12px;
+       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+     }
+
+     h1 {
+       font-size: 2rem;
+       margin-bottom: 1rem;
+       color: #1f2937;
+     }
+
+     p {
+       margin: 0.5rem 0;
+     }
+
+     h2 {
+       margin-top: 2rem;
+       color: #1d4ed8;
+       font-size: 1.25rem;
+       border-bottom: 2px solid #e5e7eb;
+       padding-bottom: 0.5rem;
+     }
+
+     .image-gallery {
+       display: flex;
+       flex-wrap: wrap;
+       gap: 1rem;
+       margin-top: 1rem;
+     }
+
+     .image-gallery img {
+       border-radius: 8px;
+       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+       width: 200px;
+       object-fit: cover;
+     }
+
+     table {
+       width: 100%;
+       border-collapse: collapse;
+       margin-top: 1rem;
+     }
+
+     th, td {
+       padding: 0.75rem;
+       border: 1px solid #e5e7eb;
+       text-align: left;
+     }
+
+     th {
+       background-color: #eff6ff;
+       color: #1e40af;
+       font-weight: 600;
+     }
+
+     td img {
+       max-width: 150px;
+       border-radius: 6px;
+       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+     }
+
+     .empty-state {
+       color: #6b7280;
+       font-style: italic;
+       margin-top: 1rem;
+     }
+
+   </style>
+
+</head>
+<body>
+
+<div class="card">
+  <wa-button variant="secondary" onclick="history.back()">
+    <wa-icon name="arrow-left"></wa-icon>
+    Back
+  </wa-button>
+
+  <!-- Product Info -->
+  <h1 th:text="${product.title}">Product Title</h1>
+  <p><strong>Vendor:</strong> <span th:text="${product.vendor} ?: 'N/A'">Vendor</span></p>
+  <p><strong>Handle:</strong> <span th:text="${product.handle} ?: 'N/A'">Handle</span></p>
+
+  <!-- Images Section -->
+  <div th:if="${product.images != null and !#lists.isEmpty(product.images)}">
+    <h2>Images</h2>
+    <div class="image-gallery">
+      <img th:each="image : ${product.images}"
+           th:src="${image.src}"
+           alt="Product Image"/>
+    </div>
+  </div>
+  <div th:if="${product.images == null or #lists.isEmpty(product.images)}">
+    <p class="empty-state">No images available.</p>
+  </div>
+
+  <!-- Variants Section -->
+  <div th:if="${product.variants != null and !#lists.isEmpty(product.variants)}">
+    <h2>Variants</h2>
+    <table>
+      <thead>
+      <tr>
+        <th>Title</th>
+        <th>Price</th>
+        <th>Image</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="variant : ${product.variants}">
+        <td th:text="${variant.title} ?: 'N/A'">Variant Title</td>
+        <td th:text="${variant.price} ?: 'N/A'">Price</td>
+        <td>
+          <img th:if="${variant.featured_image != null}"
+               th:src="${variant.featured_image.src}"
+               th:alt="${variant.featured_image.alt ?: 'Variant Image'}"/>
+          <span th:if="${variant.featured_image == null}">No image</span>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div th:if="${product.variants == null or #lists.isEmpty(product.variants)}">
+    <p class="empty-state">No variants available.</p>
+  </div>
+</div>
+
+</body>
+</html>
+
