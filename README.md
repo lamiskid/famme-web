@@ -44,14 +44,17 @@ https://github.com/lamiskid/famme-web.git
 ## ✅ Tests Example
 
 ```kotlin
- @Test
-    fun `getProductWithImage should return null if product not found`() {
-        val productId = 99L
-        whenever(productRepository.findById(productId)).thenReturn(null)
+   @Test
+    fun `countProducts should return correct total product count`() {
 
-        val result = productService.getProductWithImage(productId)
+        val expectedCount = 50L
 
-        assertNull(result)
+        whenever(productRepository.countTotalProduct()).thenReturn(expectedCount)
+
+        val result = productService.countProducts()
+
+        assertEquals(expectedCount, result)
+        verify(productRepository).countTotalProduct()
     }
 
 
