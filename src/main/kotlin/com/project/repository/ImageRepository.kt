@@ -43,4 +43,10 @@ class ImageRepository(
         jdbcClient.sql("DELETE FROM images WHERE id = :id")
             .param("id", id)
             .update()
+
+    fun deleteImagesByProductId(productId: Long): Int {
+        return jdbcClient.sql("DELETE FROM images WHERE product_id = :productId")
+            .param("productId", productId)
+            .update()
+    }
 }

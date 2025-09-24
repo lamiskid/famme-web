@@ -4,10 +4,8 @@ import com.project.entity.Product
 import com.project.service.ProductService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.*
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 @Controller
 @RequestMapping("/ui")
@@ -172,6 +170,67 @@ class UiController(
         model.addAttribute("search", q)
 
         return "fragments/product-table :: productTableFragment"
+    }
+
+    @GetMapping("/products/{id}/edit")
+    fun editProductPage(@PathVariable id: Long, model: Model): String {
+        val product = productService.findById(id)
+        model.addAttribute("product", product)
+        return "products/edit"
+    }
+
+    @PostMapping("/products/{id}")
+    fun updateProduct(
+        @PathVariable id: Long,
+        @RequestParam title: String,
+        @RequestParam vendor: String,
+        @RequestParam handle: String,
+        redirectAttributes: RedirectAttributes
+    ): String {
+        val product = Product(
+            id = null,
+            title = title,
+            vendor = vendor,
+            handle = handle,
+            variantsJson = null.toString()
+        )
+        productService.updateProduct(id, product)
+        redirectAttributes.addFlashAttribute("message", "Product updated")
+        return "redirect:/"
+    }
+
+
+    @DeleteMapping("/products/{id}")
+    //@ResponseBody
+    fun deleteProduct(@PathVariable id: Long, model: Model): String {
+        productService.deleteById(id)
+        val page = 0
+        val size = 10
+        val products = productService.getProductsPaged(size, 0)
+        val total = productService.getTotalProducts()
+        val totalPages = if (size == 0) 0 else (total + size - 1) / size
+        val hasNextPage = (page + 1) < totalPages
+        model.addAttribute("products", products)
+        model.addAttribute("page", page)
+        model.addAttribute("size", size)
+        model.addAttribute("totalPages", totalPages)
+        model.addAttribute("hasNextPage", hasNextPage)
+        model.addAttribute("nextPage", page + 1)
+        return "fragments/product-table :: productTableFragment"
+    }
+
+    @GetMapping("/products/view/{id}")
+    fun viewProduct(@PathVariable id: Long, model: Model): String {
+        val product = productService.getProductWithImage(id)
+            ?: throw NoSuchElementException("Product not found: $id")
+
+        println("Product: $product")
+
+        model.addAttribute("product", product)
+        model.addAttribute("variants", product.variants)
+        model.addAttribute("images", product.images) // if your view needs them
+
+        return "products/view"
     }
 
 }
