@@ -5,7 +5,6 @@
   <title>Product Dashboard</title>
 
   <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-
   <link rel="stylesheet" href="https://early.webawesome.com/webawesome@3.0.0-beta.6/dist/styles/webawesome.css" />
   <script type="module" src="https://early.webawesome.com/webawesome@3.0.0-beta.6/dist/webawesome.loader.js"></script>
   <link rel="stylesheet" href="/style.css">
@@ -16,16 +15,18 @@
 </header>
 
 <main class="container">
-  <wa-button variant="brand"
-             hx-get="/ui/products"
-             hx-target="#product-table"
-             hx-trigger="click">
-    <wa-icon name="box"></wa-icon>
-    Load Products
-  </wa-button>
-  <div class="flex justify-between items-center mb-4">
-    <div class="flex space-x-2">
-      <a href="/ui/products/search" class="p-2 rounded bg-gray-100 hover:bg-gray-200" title="Search products">
+
+  <div style="display: flex; align-items: center; gap: 50px;">
+    <wa-button variant="brand"
+               hx-get="/ui/products"
+               hx-target="#product-table"
+               hx-trigger="click">
+      <wa-icon name="box"></wa-icon>
+      Load Products
+    </wa-button>
+
+    <div>
+      <a href="/ui/products/search" title="Search products">
         <wa-icon name="search"></wa-icon>
       </a>
     </div>
