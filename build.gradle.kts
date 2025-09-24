@@ -32,6 +32,9 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0") // latest as of 2025
+	testImplementation("org.mockito:mockito-core:5.14.1") // make sure mockito core is there
+	testImplementation("org.junit.jupiter:junit-jupiter:5.11.0")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
