@@ -1,115 +1,10 @@
-<!--
-<table xmlns:th="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
-       xmlns:th="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
-       xmlns:th="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
-  <thead>
-  <tr>
-    <th>ID</th>
-    <th>Title</th>
-    <th>Vendor</th>
-    <th>Handle</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="p : ${products}">
-    <td th:text="${p.id}"></td>
-    <td th:text="${p.title}"></td>
-    <td th:text="${p.vendor}"></td>
-    <td th:text="${p.handle}"></td>
-  </tr>
-  </tbody>
-</table>
-
-<div style="margin-top: var(&#45;&#45;fa-spacing-md); display:flex; justify-content: space-between; align-items:center;">
-
-  <button
-      color="secondary"
-      th:if="${page > 0}"
-      hx-get="@{'/ui/products?page=' + (${page} - 1) + '&size=' + ${size}}"
-      hx-target="#product-table"
-      hx-swap="outerHTML">
-    <i class="fa-solid fa-arrow-left"></i> Prev
-  </button>
-
-  &lt;!&ndash; Page indicator &ndash;&gt;
-  <span style="font-weight: bold; color: var(&#45;&#45;fa-color-blue-600);">
-        Page <span th:text="${page + 1}"></span> of <span th:text="${totalPages}"></span>
-    </span>
-
-  <fa-button
-      color="secondary"
-      th:if="${page + 1 < totalPages}"
-      hx-get="@{'/ui/products?page=' + (${page} + 1) + '&size=' + ${size}}"
-      hx-target="#product-table"
-      hx-swap="outerHTML">
-    Next <i class="fa-solid fa-arrow-right"></i>
-  </fa-button>
-
-
-</div>
--->
-<!--
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
   <title>Product Table</title>
-
-  &lt;!&ndash; ✅ Font Awesome (Latest CDN) &ndash;&gt;
-
-
-  &lt;!&ndash; Optional: Some basic styling &ndash;&gt;
+  <link rel="stylesheet" href="/style.css">
 </head>
-<body>
-
-&lt;!&ndash; Table &ndash;&gt;
-<table id="product-table">
-  <thead>
-  <tr>
-    <th>ID</th>
-    <th>Title</th>
-    <th>Vendor</th>
-    <th>Handle</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="p : ${products}">
-    <td th:text="${p.id}"></td>
-    <td th:text="${p.title}"></td>
-    <td th:text="${p.vendor}"></td>
-    <td th:text="${p.handle}"></td>
-  </tr>
-  </tbody>
-</table>
-
-<div class="pagination" style="display: flex; justify-content: space-between; align-items: center; margin-top: var(&#45;&#45;wa-spacing-md);">
-  <wa-button variant="brand"
-             th:if="${page > 0}"
-             hx-get="@{'/ui/products?page=' + (${page} - 1) + '&size=' + ${size}}"
-             hx-target="#product-table"
-             hx-swap="outerHTML">
-    <wa-icon name="arrow-left"></wa-icon> Prev
-  </wa-button>
-
-  <span style="font-weight: bold; color: var(&#45;&#45;wa-color-blue-600);">
-    Page <span th:text="${page != null ? page + 1 : 1}"></span> of <span
-      th:text="${totalPages != null ? totalPages : 1}"></span>
-  </span>
-
-  <wa-button variant="brand"
-             th:if="${hasNextPage}"
-             hx-get="@{'/ui/products?page=' + ${nextPage} + '&size=' + ${size}}"
-             hx-target="#product-table"
-             hx-swap="outerHTML">
-    Next <wa-icon name="arrow-right"></wa-icon>
-  </wa-button>
-</div>
-
-</body>
-</html>
--->
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <div id="product-container" th:fragment="productTableFragment">
 
   <table id="product-table">
@@ -119,6 +14,7 @@
       <th>Title</th>
       <th>Vendor</th>
       <th>Handle</th>
+      <th colspan="3">Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -127,12 +23,69 @@
       <td th:text="${p.title}"></td>
       <td th:text="${p.vendor}"></td>
       <td th:text="${p.handle}"></td>
+
+      <!-- View Button -->
+      <td>
+        <a th:href="@{'/ui/products/view/' + ${p.id}}"
+           class="btn-table"
+           title="View product">
+          <wa-icon name="eye"></wa-icon>
+          View
+        </a>
+      </td>
+
+      <!-- Edit Button -->
+      <td>
+        <a th:href="@{'/ui/products/' + ${p.id} + '/edit'}"
+           class="btn-table"
+           title="Edit product">
+          <wa-icon name="edit"></wa-icon>
+          Edit
+        </a>
+      </td>
+
+      <!-- Delete Button -->
+      <td>
+        <button type="button"
+                class="btn-table btn-danger"
+                th:attr="data-dialog-id=${'delete-dialog-' + p.id}"
+                onclick="document.getElementById(this.dataset.dialogId).showModal()">
+          <wa-icon name="trash"></wa-icon>
+          Delete
+        </button>
+
+        <!-- Delete Dialog -->
+        <dialog th:id="${'delete-dialog-' + p.id}">
+          <form method="dialog" style="min-width: 320px; padding: 1rem;">
+            <p><strong>Delete product?</strong></p>
+            <p th:text="'Are you sure you want to delete product #' + ${p.id} + ' (' + ${p.title} + ')?'"></p>
+            <menu style="display:flex; gap: 8px; justify-content: flex-end; margin-top: 1rem;">
+              <button class="btn-secondary" value="cancel">
+                <wa-icon name="times"></wa-icon>
+                Cancel
+              </button>
+              <button type="button"
+                      class="btn-danger"
+                      th:attr="hx-delete=@{'/ui/products/' + ${p.id}}"
+                      hx-target="#product-table"
+                      hx-swap="outerHTML"
+                      onclick="this.closest('dialog').close()">
+                <wa-icon name="check"></wa-icon>
+                Confirm
+              </button>
+            </menu>
+          </form>
+        </dialog>
+      </td>
     </tr>
+
+    <!-- Empty state -->
     <tr th:if="${#lists.isEmpty(products)}">
-      <td colspan="4" style="text-align:center; color: grey;">No products found</td>
+      <td colspan="7" style="text-align:center; color: grey;">No products found</td>
     </tr>
     </tbody>
   </table>
+
 
   <div class="pagination"
        style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--wa-spacing-md);">
@@ -142,7 +95,8 @@
                th:attr="hx-get=@{/ui/products(page=${page - 1}, size=${size})}"
                hx-target="#product-container"
                hx-swap="outerHTML">
-      <wa-icon name="arrow-left"></wa-icon> Prev
+      <wa-icon name="arrow-left"></wa-icon>
+      Prev
     </wa-button>
 
     <span style="font-weight: bold; color: var(--wa-color-blue-600);">
@@ -155,7 +109,8 @@
                th:attr="hx-get=@{/ui/products(page=${nextPage}, size=${size})}"
                hx-target="#product-container"
                hx-swap="outerHTML">
-      Next <wa-icon name="arrow-right"></wa-icon>
+      Next
+      <wa-icon name="arrow-right"></wa-icon>
     </wa-button>
   </div>
 
