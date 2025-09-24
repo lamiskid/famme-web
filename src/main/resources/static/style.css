@@ -1,5 +1,8 @@
+/*
 :root {
-  /* You can still override or use tokens directly for other elements */
+  */
+/* You can still override or use tokens directly for other elements *//*
+
   --header-bg: var(--wa-color-blue-600);
   --header-text: var(--wa-color-white);
 }
@@ -67,4 +70,175 @@ form {
 #image-fields label {
   display: block;
   margin-top: 8px;
+}*/
+:root {
+  /* Custom design tokens (fallbacks added) */
+  --header-bg: var(--wa-color-blue-600, #1e3a8a);
+  --header-text: var(--wa-color-white, #ffffff);
+  --wa-spacing-sm: 0.5rem;
+  --wa-spacing-md: 1rem;
+  --wa-spacing-lg: 2rem;
+  --wa-space-3xs: 0.25rem;
+  --wa-space-m: 1rem;
+  --wa-font-size-lg: 1.5rem;
+  --wa-font-weight-bold: 700;
+
+  --wa-color-gray-300: #d1d5db;
+  --wa-color-blue-100: #dbeafe;
+  --wa-color-blue-600: #2563eb;
+}
+
+/* Reset & base styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, sans-serif;
+  background-color: #f9fafb;
+  color: #111827;
+  line-height: 1.6;
+}
+
+header {
+  background-color: var(--header-bg);
+  color: var(--header-text);
+  padding: var(--wa-spacing-md);
+  text-align: center;
+  font-size: var(--wa-font-size-lg);
+  font-weight: var(--wa-font-weight-bold);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+main {
+  padding: var(--wa-spacing-lg);
+  max-width: 900px;
+  margin: auto;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Table Styling */
+table {
+  width: 100%;
+  margin-top: var(--wa-spacing-md);
+  border-collapse: collapse;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+th, td {
+  border: 1px solid var(--wa-color-gray-300);
+  padding: var(--wa-spacing-sm);
+  text-align: left;
+}
+
+th {
+  background-color: var(--wa-color-blue-100);
+  color: #1e3a8a;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+}
+
+/* Form Styling */
+form {
+  margin-top: var(--wa-space-m);
+  display: grid;
+  gap: var(--wa-space-3xs);
+}
+
+form input,
+form textarea,
+form select {
+  padding: 0.5rem;
+  border: 1px solid var(--wa-color-gray-300);
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+/* Button Styling */
+.icon-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--wa-color-blue-600);
+  padding: 4px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+.icon-btn:hover {
+  text-decoration: underline;
+}
+
+.icon-btn wa-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 4px;
+}
+
+/* Image Fields Section */
+#image-fields {
+  margin-top: 1rem;
+}
+
+#image-fields label {
+  display: block;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+#image-fields input[type="text"],
+#image-fields input[type="file"] {
+  margin-top: 4px;
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--wa-color-gray-300);
+  border-radius: 4px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+.btn-table {
+  padding: 6px 12px;
+  font-size: 0.875rem;
+  background-color: #e5e7eb;
+  color: #111827;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.2s;
+}
+
+.btn-table:hover {
+  background-color: #d1d5db;
+}
+
+.btn-danger {
+  background-color: #f87171;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #ef4444;
+}
+
+.btn-secondary {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.btn-secondary:hover {
+  background-color: #e5e7eb;
 }
